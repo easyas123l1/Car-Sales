@@ -1,14 +1,29 @@
+import { ADD_FEATURE, REMOVE_FEATURE } from '../actions/App';
+
 export const reducer = (state, action) => {
   console.log('reducer fired', action);
-  switch (action.type) {
-    //cases go here
+  switch(action.type){
+    case ADD_FEATURE:
+      return {...state,
+        additionalPrice: state.additionalPrice + action.payload.price,
+         car: {...state.car,
+          features: [...state.car.features, action.payload]},
+          additionalFeatures: [...state.additionalFeatures.filter(feature => feature.id !== action.payload.id)] };
 
-    
-    default: return state;
+    case REMOVE_FEATURE:
+      console.log(`Removing Feature: ${action.payload.name}`);
+      return {...state,
+        additionalPrice: state.additionalPrice - action.payload.price,
+        car: {...state.car, 
+          features: [...state.car.features.filter(feature => feature.id !==action.payload.id)]},
+          additionalFeatures: [...state.additionalFeatures, action.payload]};
+
+    default:
+        return state;
   }
 }
 
-export const initialSate = {
+export const initialState = {
   additionalPrice: 0,
   car: {
     price: 26395,
